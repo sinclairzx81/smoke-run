@@ -1,0 +1,32 @@
+{
+  "name": "smoke-run",
+  "version": "1.0.0",
+  "description": "Run shell commands on file system events.",
+  "scripts": {
+    "clean": "smoke-task clean",
+    "start": "npm install && smoke-task start",
+    "pack": "npm install && smoke-task pack",
+    "install-cli": "npm install && smoke-task install_cli"
+  },
+  "bin": {
+    "smoke-run": "./smoke-run"
+  },
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinclairzx81/smoke-run"
+  },
+  "author": "sinclairzx81",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/node": "^8.0.7",
+    "shx": "^0.2.2",
+    "smoke-task": "^1.0.0",
+    "typescript": "^3.2.4",
+    "typescript-bundle": "^1.0.7"
+  },
+  "dependencies": {
+    "glob": "^7.1.3"
+  }
+}
