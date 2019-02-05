@@ -37,27 +37,34 @@ import { runShell }                             from './shell'
 // -------------------------------------------------------------------------
 
 async function info(info: InfoCommand) {
-  console.log(['Version 1.0.0',
-  '',
-  '$ \x1b[32msmoke-run\x1b[0m <glob> -- <command>',
-  '',
-  'Examples: \x1b[32msmoke-run\x1b[0m index.js -- node index.js',
-  '          \x1b[32msmoke-run\x1b[0m **',
-  '          \x1b[32msmoke-run\x1b[0m **.js',
-  '          \x1b[32msmoke-run\x1b[0m {**,.}/*.js',
-  '',
-  ].join('\n'))
-  if(info.targets.length > 0) {
-    info.targets.forEach(target => console.log(`\x1b[32mmatched\x1b[0m`, target))
-    console.log()
-  }
+  const buffer = []
+  const green  = '\x1b[32m'
+  const yellow = '\x1b[33m'
+  const esc    = '\x1b[0m'
+
+  buffer.push(...['Version 1.0.1',
+  ``,
+  `$ \x1b[32msmoke-run\x1b[0m <glob> -- <command>`,
+  ``,
+  `Examples: ${green}smoke-run${esc} index.js -- node index.js`,
+  `          ${green}smoke-run${esc} **`,
+  `          ${green}smoke-run${esc} **.js`,
+  `          ${green}smoke-run${esc} {**,.}/*.js`,
+  ``,
+  ])
+
+  const targets = info.targets.map(target => {
+    return `${yellow}match${esc} ${target}`
+  })
+
+  console.log([...buffer, ...targets, ...['']].join('\n'))
 }
 
 // -------------------------------------------------------------------------
 //
 // Run
 //
-// Runs the users command. This command is run in a watch loop.
+// Runs the users command. This function runs in a watch loop.
 //
 // -------------------------------------------------------------------------
 

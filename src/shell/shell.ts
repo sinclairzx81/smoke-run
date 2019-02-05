@@ -52,7 +52,7 @@ export class ShellHandle {
   private disposed: boolean
   constructor(private process: ChildProcess) {
     this.process.on('close', code => this.onClose(code))
-    this.process.on('exit', code => this.onClose(code))
+    this.process.on('exit',  ()   => this.onExit())
     this.process.stdout.setEncoding('utf8')
     this.process.stderr.setEncoding('utf8')
     this.process.stdout.on('data', (data: string) => this.onData(data))
@@ -62,6 +62,13 @@ export class ShellHandle {
 
   private onData(data: string) {
     process.stdout.write(data)
+  }
+  private onExit() {
+    const yellow = '\x1b[33m'
+    const esc    = '\x1b[0m'
+    const message = `${yellow}done${esc}\n`
+    process.stdout.write(message)
+    this.disposed = true
   }
   private onClose(exitcode: number) {
     this.disposed = true
