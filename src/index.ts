@@ -42,9 +42,9 @@ async function info(info: InfoCommand) {
   const yellow = '\x1b[33m'
   const esc    = '\x1b[0m'
 
-  buffer.push(...['Version 1.0.1',
+  buffer.push(...['Version 1.0.2',
   ``,
-  `$ \x1b[32msmoke-run\x1b[0m <glob> -- <command>`,
+  `$ ${green}smoke-run${esc} <glob> -- <command>`,
   ``,
   `Examples: ${green}smoke-run${esc} index.js -- node index.js`,
   `          ${green}smoke-run${esc} **`,
@@ -70,8 +70,8 @@ async function info(info: InfoCommand) {
 
 async function run(command: RunCommand) {
   const processes = [runShell(command.command)]
-  createWatcher(command.targets, () => {
-    processes.shift()!.dispose()
+  createWatcher(command.targets, async () => {
+    await processes.shift()!.dispose()
     processes.unshift(runShell(command.command))
   })
 }

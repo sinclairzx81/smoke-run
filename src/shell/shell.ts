@@ -50,7 +50,10 @@ function linuxKill(sh: ChildProcess) {
 
 export class ShellHandle {
   private disposed: boolean
+  private exited: boolean
+  
   constructor(private process: ChildProcess) {
+    this.onStart()
     this.process.on('close', code => this.onClose(code))
     this.process.on('exit',  ()   => this.onExit())
     this.process.stdout.setEncoding('utf8')
@@ -58,23 +61,48 @@ export class ShellHandle {
     this.process.stdout.on('data', (data: string) => this.onData(data))
     this.process.stderr.on('data', (data: string) => this.onData(data))
     this.disposed = false
+    this.exited = false
+  }
+
+  private printSignal(message: string) {
+    const gray = '\x1b[90m'
+    const esc = '\x1b[0m'
+    const out = `${gray}[${message}]${esc}\n`
+    process.stdout.write(out)
+  }
+
+  private onStart(): void {
+    this.printSignal('run')
   }
 
   private onData(data: string) {
     process.stdout.write(data)
   }
+
   private onExit() {
-    const yellow = '\x1b[33m'
-    const esc    = '\x1b[0m'
-    const message = `${yellow}done${esc}\n`
-    process.stdout.write(message)
-    this.disposed = true
+    this.exited = true
+    this.printSignal('end')
   }
+  
   private onClose(exitcode: number) {
-    this.disposed = true
+    this.exited = true
   }
-  public dispose() {
-    if(!this.disposed) {
+
+  private waitForExit() {
+    return new Promise((resolve, reject) => {
+      const wait = () => {
+        if(this.exited) {
+          return resolve()
+        }
+        setTimeout(() => wait(), 10)
+      }
+      wait()
+    })
+  }
+
+  public async dispose() {
+    if(!this.exited && !this.disposed) {
+      this.disposed = true
       this.process.stdout.removeAllListeners()
       this.process.stderr.removeAllListeners()
       this.process.stdin.removeAllListeners()
@@ -86,6 +114,10 @@ export class ShellHandle {
       } else {
         linuxKill(this.process)
       }
+      // wait for either a 'close' or 'exit' event to 
+      // set 'exited' to true. Used to help prevent 
+      // processoverlap at the caller.
+      await this.waitForExit()
     }
   }
 }
