@@ -2,6 +2,8 @@
 
 Runs shell commands on file system watch events.
 
+[![NPM package](https://badge.fury.io/js/smoke-run.svg)](https://www.npmjs.com/package/smoke-run) 
+
 ```
 $ npm install smoke-run -g
 ```
