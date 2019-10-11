@@ -1,12 +1,12 @@
 {
   "name": "smoke-run",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Run shell commands on file system events.",
   "scripts": {
     "clean": "smoke-task clean",
-    "start": "npm install && smoke-task start",
-    "pack": "npm install && smoke-task pack",
-    "install-cli": "npm install && smoke-task install_cli"
+    "start": "smoke-task start",
+    "pack": "smoke-task pack",
+    "install_cli": "smoke-task install_cli"
   },
   "bin": {
     "smoke-run": "./smoke-run"
@@ -21,8 +21,7 @@
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/node": "^8.0.7",
-    "shx": "^0.2.2",
-    "smoke-task": "^1.0.0",
+    "smoke-task": "^1.1.2",
     "typescript": "^3.2.4",
     "typescript-bundle": "^1.0.7"
   },

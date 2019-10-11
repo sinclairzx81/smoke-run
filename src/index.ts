@@ -42,11 +42,11 @@ async function info(info: InfoCommand) {
   const yellow = '\x1b[33m'
   const esc    = '\x1b[0m'
 
-  buffer.push(...['Version 1.0.2',
+  buffer.push(...['Version 1.1.0',
   ``,
-  `$ ${green}smoke-run${esc} <glob> -- <command>`,
+  `$ ${green}smoke-run${esc} <glob> -x <command>`,
   ``,
-  `Examples: ${green}smoke-run${esc} index.js -- node index.js`,
+  `Examples: ${green}smoke-run${esc} index.js -x "node index.js"`,
   `          ${green}smoke-run${esc} **`,
   `          ${green}smoke-run${esc} **.js`,
   `          ${green}smoke-run${esc} {**,.}/*.js`,

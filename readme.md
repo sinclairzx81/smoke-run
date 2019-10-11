@@ -9,7 +9,9 @@ $ npm install smoke-run -g
 ```
 
 ```bash
-$ smoke-run ./index.js -- node ./src/index.js
+# re-run index.js on file change
+
+$ smoke-run ./index.js -x "node ./src/index.js"
 ```
 
 ## Overview
@@ -21,12 +23,12 @@ Smoke-Run is a development tool used to run and re-run shell commands on file sy
 Smoke-Run accepts a glob as its first argument followed by a seperator `--` then the shell command to run.
 
 ```
-$ smoke-run <glob> -- <command>
+$ smoke-run <glob> -x <command>
 
-Examples: smoke-run index.js    -- node index.js
-          smoke-run **          -- node index.js
-          smoke-run **.js       -- node index.js
-          smoke-run {**,.}/*.js -- node index.js
+Examples: smoke-run index.js    -x "node index.js"
+          smoke-run **          -x "node index.js"
+          smoke-run **.js       -x "node index.js"
+          smoke-run {**,.}/*.js -x "node index.js"
 ```
 
 ## Tasks
@@ -34,5 +36,5 @@ Examples: smoke-run index.js    -- node index.js
 ```bash
 npm run clean       # cleans this project
 npm run pack        # builds npm pack file.
-npm run install-cli # packs and installs the cli locally.
+npm run install_cli # packs and installs the cli locally.
 ```

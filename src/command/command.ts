@@ -69,7 +69,7 @@ export function readCommand(args: string[]): Command {
   const buffer      = []
   while(args.length > 0) {
     const next = args.shift()!
-    if(next === '--') {
+    if(next === '-x') {
       gathering = false
       continue
     }
