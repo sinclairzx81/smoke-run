@@ -109,11 +109,22 @@ export class ShellHandle {
       this.process.stdout.pause()
       this.process.stderr.pause()
       this.process.stdin.end()
-      if(/^win/.test(process.platform)) {
-        execSync(`taskkill /pid ${this.process.pid} /T /F`)
-      } else {
-        linuxKill(this.process)
+
+      // Attempt to dispose child process. Windows 
+      // sometimes reports that the process does
+      // not exist, potentially indicating that
+      // the process has been terminated out
+      // of band. Run an warn on error.
+      try {
+        if(/^win/.test(process.platform)) {
+          execSync(`taskkill /pid ${this.process.pid} /T /F`)
+        } else {
+          linuxKill(this.process)
+        }
+      } catch(error) {
+        console.warn(error.message)
       }
+
       // wait for either a 'close' or 'exit' event to 
       // set 'exited' to true. Used to help prevent 
       // processoverlap at the caller.
