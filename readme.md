@@ -20,7 +20,7 @@ Smoke-Run is a development tool used to run and re-run shell commands on file sy
 
 ## Usage
 
-Smoke-Run accepts a glob as its first argument followed by a seperator `--` then the shell command to run.
+Smoke-Run accepts a glob as its first argument followed by a seperator `-x` then the shell command to run.
 
 ```
 $ smoke-run <glob> -x <command>
