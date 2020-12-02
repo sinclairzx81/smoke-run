@@ -42,7 +42,7 @@ async function info(info: InfoCommand) {
   const yellow = '\x1b[33m'
   const esc    = '\x1b[0m'
 
-  buffer.push(...['Version 1.1.1',
+  buffer.push(...['Version 1.1.2',
   ``,
   `$ ${green}smoke-run${esc} <glob> -x <command>`,
   ``,

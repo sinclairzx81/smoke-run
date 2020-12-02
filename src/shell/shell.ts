@@ -52,16 +52,12 @@ export class ShellHandle {
   private disposed: boolean
   private exited: boolean
   
-  constructor(private process: ChildProcess) {
+  constructor(private readonly process: ChildProcess) {
     this.onStart()
     this.process.on('close', code => this.onClose(code))
     this.process.on('exit',  ()   => this.onExit())
-    this.process.stdout.setEncoding('utf8')
-    this.process.stderr.setEncoding('utf8')
-    this.process.stdout.on('data', (data: string) => this.onData(data))
-    this.process.stderr.on('data', (data: string) => this.onData(data))
     this.disposed = false
-    this.exited = false
+    this.exited   = false
   }
 
   private printSignal(message: string) {
@@ -75,7 +71,7 @@ export class ShellHandle {
     this.printSignal('run')
   }
 
-  private onData(data: string) {
+  private onData(data: Buffer) {
     process.stdout.write(data)
   }
 
@@ -92,7 +88,7 @@ export class ShellHandle {
     return new Promise((resolve, reject) => {
       const wait = () => {
         if(this.exited) {
-          return resolve()
+          return resolve(void 0)
         }
         setTimeout(() => wait(), 10)
       }
@@ -103,13 +99,6 @@ export class ShellHandle {
   public async dispose() {
     if(!this.exited && !this.disposed) {
       this.disposed = true
-      this.process.stdout.removeAllListeners()
-      this.process.stderr.removeAllListeners()
-      this.process.stdin.removeAllListeners()
-      this.process.stdout.pause()
-      this.process.stderr.pause()
-      this.process.stdin.end()
-
       // Attempt to dispose child process. Windows 
       // sometimes reports that the process does
       // not exist, potentially indicating that
@@ -143,5 +132,5 @@ export function resolveOsCommand(command: string): [string, [string, string]] {
 /** Executes this shell command and returns a disposable handle. */
 export function runShell(command: string): ShellHandle {
   const [processName, params] = resolveOsCommand(command)
-  return new ShellHandle(spawn(processName, params))
+  return new ShellHandle(spawn(processName, params, { stdio: 'inherit' }))
 }
