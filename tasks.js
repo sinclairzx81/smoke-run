@@ -24,12 +24,6 @@ export async function pack() {
   await folder('./target/pack').add('./license').exec()
   // pack
   await shell('cd ./target/pack && npm pack').exec()
-  // clean
-  await file('./target/pack/index.js').delete().exec()
-  await file('./target/pack/smoke-run').delete().exec()
-  await file('./target/pack/package.json').delete().exec()
-  await file('./target/pack/readme.md').delete().exec()
-  await file('./target/pack/license').delete().exec()
 }
 
 export async function install_cli() {
