@@ -39,7 +39,6 @@ async function info(message: string) {
   const red = '\x1b[31m'
   const esc = '\x1b[0m'
   console.log([
-    'Version 1.2.0',
     '',
     `$ ${green}smoke-run${esc} <path> -x <command>`,
     '',
