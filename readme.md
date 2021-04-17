@@ -10,6 +10,8 @@
 
 ## Usage
 
+The following watches the file `index.js` and starts runs it on save.
+
 ```shell
 $ npx smoke-run index.js -x node index.js
 ```
