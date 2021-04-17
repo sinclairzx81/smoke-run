@@ -18,6 +18,6 @@ $ npx smoke-run index.js -x node index.js
 
 ## Overview
 
-Smoke-Run is a development tool used to run and shell commands on file system watch events. It is mainly written to allow for auto restarting node scripts on save.
+Smoke-Run is a development tool used to run and shell commands on file system watch events. It is mainly written to allow for auto restarting node scripts on save but can be used to run any shell command on file system watch events.
 
 License MIT
