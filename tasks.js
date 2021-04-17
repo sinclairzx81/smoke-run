@@ -3,7 +3,7 @@ export async function clean() {
 }
 
 export async function build(target = 'target/build') {
-  await folder(`target/pack`).delete().exec()
+  await folder(`${target}`).delete().exec()
   await shell(`tsc --project src/tsconfig.json --outDir ${target}/index.js`).exec()
   await folder(`${target}`).add('src/smoke-run').exec()
   await folder(`${target}`).add('package.json').exec()
