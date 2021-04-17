@@ -36,6 +36,7 @@ import { join }  from 'path'
 
 async function info(message: string) {
   const green = '\x1b[32m'
+  const red = '\x1b[31m'
   const esc = '\x1b[0m'
   console.log([
     'Version 1.2.0',
@@ -43,9 +44,10 @@ async function info(message: string) {
     `$ ${green}smoke-run${esc} <path> -x <command>`,
     '',
     `Examples: ${green}smoke-run${esc} index.js -x "node index.js"`,
-    `          ${green}smoke-run${esc} src -x "node src/index.js`,
+    `          ${green}smoke-run${esc} src -x "node src/index.js"`,
     '',
-     message,
+     `${red}${message}${esc}`,
+    ''
   ].join('\n'))
 }
 
@@ -68,9 +70,9 @@ async function start(target: string, command: string) {
 async function main(args: string[]) {
   if(args.length < 5) return info('')
   const target  = join(process.cwd(), process.argv[2])
-  if(!existsSync(target)) return info(`${target} not found`)
+  if(!existsSync(target)) return info(`Error ${target} not found`)
   const execute = process.argv[3]
-  if(execute !== '-x') return info(`Invalid process arguments`)
+  if(execute !== '-x') return info(`Error Invalid process arguments`)
   const command = process.argv.slice(4).join(' ')
   await start(target, command)
 }

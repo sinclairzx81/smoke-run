@@ -1,6 +1,6 @@
 {
   "name": "smoke-run",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Run shell commands on file system events.",
   "author": "sinclairzx81",
   "license": "MIT",
