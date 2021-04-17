@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) smoke-run 2019 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
+Copyright (c) smoke-run 2021 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,70 +24,55 @@ SOFTWARE.
 
 ---------------------------------------------------------------------------*/
 
-import { readCommand, RunCommand, InfoCommand } from './command'
-import { createWatcher  }                       from './watcher'
-import { runShell }                             from './shell'
+import { watch } from './runtime/watch'
+import { shell }   from './runtime/shell'
+import { existsSync } from 'fs'
+import { join }  from 'path'
+
 
 // -------------------------------------------------------------------------
-//
 // Info
-//
-// Prints a help message to the user and watch targets, if any.
-//
 // -------------------------------------------------------------------------
 
-async function info(info: InfoCommand) {
-  const buffer = []
-  const green  = '\x1b[32m'
-  const yellow = '\x1b[33m'
-  const esc    = '\x1b[0m'
-
-  buffer.push(...['Version 1.1.2',
-  ``,
-  `$ ${green}smoke-run${esc} <glob> -x <command>`,
-  ``,
-  `Examples: ${green}smoke-run${esc} index.js -x "node index.js"`,
-  `          ${green}smoke-run${esc} **`,
-  `          ${green}smoke-run${esc} **.js`,
-  `          ${green}smoke-run${esc} {**,.}/*.js`,
-  ``,
-  ])
-
-  const targets = info.targets.map(target => {
-    return `${yellow}match${esc} ${target}`
-  })
-
-  console.log([...buffer, ...targets, ...['']].join('\n'))
+async function info(message: string) {
+  const green = '\x1b[32m'
+  const esc = '\x1b[0m'
+  console.log([
+    'Version 1.2.0',
+    '',
+    `$ ${green}smoke-run${esc} <path> -x <command>`,
+    '',
+    `Examples: ${green}smoke-run${esc} index.js -x "node index.js"`,
+    `          ${green}smoke-run${esc} src -x "node src/index.js`,
+    '',
+     message,
+  ].join('\n'))
 }
 
 // -------------------------------------------------------------------------
-//
-// Run
-//
-// Runs the users command. This function runs in a watch loop.
-//
+// Start
 // -------------------------------------------------------------------------
 
-async function run(command: RunCommand) {
-  const processes = [runShell(command.command)]
-  createWatcher(command.targets, async () => {
-    await processes.shift()!.dispose()
-    processes.unshift(runShell(command.command))
-  })
-}
-
-// -------------------------------------------------------------------------
-//
-// Main
-//
-// -------------------------------------------------------------------------
-
-async function main(args: string[]) {
-  const command = readCommand(args)
-  switch(command.type) {
-    case 'run':  return run (command)
-    case 'info': return info(command)
+async function start(target: string, command: string) {
+  const process = [shell(command)]
+  for await (const _ of watch(target)) {
+    await process.shift()!.dispose()
+    process.unshift(shell(command))
   }
 }
 
-main([...process.argv])
+// -------------------------------------------------------------------------
+// Main
+// -------------------------------------------------------------------------
+
+async function main(args: string[]) {
+  if(args.length < 5) return info('')
+  const target  = join(process.cwd(), process.argv[2])
+  if(!existsSync(target)) return info(`${target} not found`)
+  const execute = process.argv[3]
+  if(execute !== '-x') return info(`Invalid process arguments`)
+  const command = process.argv.slice(4).join(' ')
+  await start(target, command)
+}
+
+main(process.argv)

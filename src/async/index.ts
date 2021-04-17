@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) smoke-run 2019 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
+Copyright (c) smoke-run 2021 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,4 +24,5 @@ SOFTWARE.
 
 ---------------------------------------------------------------------------*/
 
-export { readCommand, Command, InfoCommand, RunCommand } from './command'
+export { channel, Sender, Receiver } from './channel'
+export { Debounce } from './debounce'

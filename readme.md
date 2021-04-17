@@ -1,40 +1,34 @@
-# Smoke-Run
+<div align='center'>
 
-Runs shell commands on file system watch events.
+<h1>Smoke-Run</h1>
+
+<p>Runs shell commands on file system watch events.</p>
 
 [![NPM package](https://badge.fury.io/js/smoke-run.svg)](https://www.npmjs.com/package/smoke-run) 
 
-```
-$ npm install smoke-run -g
-```
+</div>
 
-```bash
-# re-run index.js on file change
-
-$ smoke-run ./index.js -x "node ./src/index.js"
+```shell
+$ npx smoke-run index.js -x node index.js
+#                  ^            ^
+#             watch this     run this
 ```
 
 ## Overview
 
-Smoke-Run is a development tool used to run and re-run shell commands on file system watch events. Useful for compile on save development workflows.
+Smoke-Run is a development tool used to run and shell commands on file system watch events. It is written primarily to allow for auto restarting node scripts on save.
+
+License MIT
 
 ## Usage
 
-Smoke-Run accepts a glob as its first argument followed by a seperator `-x` then the shell command to run.
+Smoke-Run accepts a `<path>` which can either be a file or directory followed by a `<command>`. Smoke-Run will run the process immediately and restart whenever it encounters a watch event on the given `<path>`.
+
+**Example**
 
 ```
-$ smoke-run <glob> -x <command>
+$ smoke-run <path> -x <command>
 
 Examples: smoke-run index.js    -x "node index.js"
-          smoke-run **          -x "node index.js"
-          smoke-run **.js       -x "node index.js"
-          smoke-run {**,.}/*.js -x "node index.js"
-```
-
-## Tasks
-
-```bash
-npm run clean       # cleans this project
-npm run pack        # builds npm pack file.
-npm run install_cli # packs and installs the cli locally.
+          smoke-run src         -x "node index.js"
 ```

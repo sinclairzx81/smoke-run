@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) smoke-run 2019 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
+Copyright (c) smoke-run 2021 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,4 +24,11 @@ SOFTWARE.
 
 ---------------------------------------------------------------------------*/
 
-export { createWatcher, WatchHandle } from './watcher'
+export class Debounce {
+    private timeout: NodeJS.Timeout | undefined
+    constructor(private readonly delay: number) { }
+    public run<T>(func: () => T) {
+        if (this.timeout !== undefined) clearTimeout(this.timeout)
+        this.timeout = setTimeout(() => func(), this.delay)
+    }
+}

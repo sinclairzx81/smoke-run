@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) smoke-run 2019 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
+Copyright (c) smoke-run 2021 Haydn Paterson (sinclair) <haydn.developer@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ export class ShellHandle {
   
   constructor(private readonly process: ChildProcess) {
     this.onStart()
-    this.process.on('close', code => this.onClose(code))
+    this.process.on('close', code => this.onClose(code!))
     this.process.on('exit',  ()   => this.onExit())
     this.disposed = false
     this.exited   = false
@@ -130,7 +130,7 @@ export function resolveOsCommand(command: string): [string, [string, string]] {
 }
 
 /** Executes this shell command and returns a disposable handle. */
-export function runShell(command: string): ShellHandle {
+export function shell(command: string): ShellHandle {
   const [processName, params] = resolveOsCommand(command)
   return new ShellHandle(spawn(processName, params, { stdio: 'inherit' }))
 }
